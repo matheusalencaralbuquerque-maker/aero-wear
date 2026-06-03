@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Aero Wear</title>
+<link rel="icon" type="image/png" href="logo.png">
 
 <style>
 
@@ -37,16 +39,30 @@ font-weight:bold;
 letter-spacing:2px;
 }
 
+nav{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
 nav a{
 color:white;
 text-decoration:none;
-margin-left:25px;
 font-size:15px;
 transition:.3s;
 }
 
 nav a:hover{
 color:#b8b8b8;
+}
+
+.cart-icon{
+background:white;
+color:black;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
 }
 
 .hero{
@@ -82,11 +98,6 @@ color:black;
 text-decoration:none;
 border-radius:8px;
 font-weight:bold;
-transition:.3s;
-}
-
-.btn:hover{
-transform:scale(1.05);
 }
 
 .produtos{
@@ -121,7 +132,6 @@ transform:translateY(-7px);
 width:100%;
 height:330px;
 object-fit:cover;
-background:#ddd;
 }
 
 .card-content{
@@ -155,11 +165,6 @@ width:100%;
 border-radius:8px;
 font-weight:bold;
 cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-background:#d9d9d9;
 }
 
 .sobre{
@@ -193,11 +198,6 @@ text-decoration:none;
 font-weight:bold;
 border-radius:10px;
 font-size:18px;
-transition:.3s;
-}
-
-.instagram a:hover{
-transform:scale(1.05);
 }
 
 footer{
@@ -208,8 +208,57 @@ color:#777;
 font-size:14px;
 }
 
+/* CARRINHO */
+
+.cart{
+position:fixed;
+top:0;
+right:-350px;
+width:350px;
+height:100%;
+background:#111;
+border-left:1px solid #333;
+padding:25px;
+transition:.4s;
+overflow:auto;
+z-index:2000;
+}
+
+.cart.active{
+right:0;
+}
+
+.cart h2{
+margin-bottom:20px;
+}
+
+.cart-item{
+margin-bottom:15px;
+padding-bottom:10px;
+border-bottom:1px solid #333;
+}
+
+.total{
+font-size:24px;
+margin-top:20px;
+font-weight:bold;
+}
+
+.close-cart{
+margin-bottom:15px;
+background:#333;
+color:white;
+}
+
+.whatsapp{
+background:#25D366;
+color:white;
+margin-top:15px;
+}
+
 </style>
 </head>
+
 <body>
 
 <header>
@@ -221,18 +270,20 @@ font-size:14px;
 <a href="#produtos">Produtos</a>
 <a href="#sobre">Sobre</a>
 <a href="#instagram">Instagram</a>
+
+<div class="cart-icon" onclick="toggleCart()">
+🛒 <span id="cart-count">0</span>
+</div>
 </nav>
 
 </header>
 
 <section class="hero">
-
 <div class="hero-content">
 <h1>AERO WEAR</h1>
 <p>Vista sua essência. Expresse sua identidade.</p>
 <a class="btn" href="#produtos">Ver Coleção</a>
 </div>
-
 </section>
 
 <section class="produtos" id="produtos">
@@ -246,8 +297,8 @@ font-size:14px;
 <div class="card-content">
 <h3>Ramen Octopus</h3>
 <p>Arte exclusiva e visual streetwear premium.</p>
-<div class="preco">R$ 80,99</div>
-<button onclick="comprar()">Adicionar</button>
+<div class="preco">R$80,99</div>
+<button onclick="addCart('Ramen Octopus',80.99)">Adicionar</button>
 </div>
 </div>
 
@@ -256,8 +307,8 @@ font-size:14px;
 <div class="card-content">
 <h3>Myth Warrior</h3>
 <p>Força e atitude em um design sombrio.</p>
-<div class="preco">R$ 80,99</div>
-<button onclick="comprar()">Adicionar</button>
+<div class="preco">R$80,99</div>
+<button onclick="addCart('Myth Warrior',80.99)">Adicionar</button>
 </div>
 </div>
 
@@ -266,8 +317,8 @@ font-size:14px;
 <div class="card-content">
 <h3>Kuromi Dark</h3>
 <p>Estilo alternativo e destaque visual.</p>
-<div class="preco">R$ 99,99</div>
-<button onclick="comprar()">Adicionar</button>
+<div class="preco">R$99,99</div>
+<button onclick="addCart('Kuromi Dark',99.99)">Adicionar</button>
 </div>
 </div>
 
@@ -276,8 +327,8 @@ font-size:14px;
 <div class="card-content">
 <h3>Olympia Blue</h3>
 <p>Inspirada em força e imponência clássica.</p>
-<div class="preco">R$ 80,99</div>
-<button onclick="comprar()">Adicionar</button>
+<div class="preco">R$80,99</div>
+<button onclick="addCart('Olympia Blue',80.99)">Adicionar</button>
 </div>
 </div>
 
@@ -286,46 +337,103 @@ font-size:14px;
 <div class="card-content">
 <h3>Wake! Wake!</h3>
 <p>Visual marcante para quem quer se destacar.</p>
-<div class="preco">R$ 109,99</div>
-<button onclick="comprar()">Adicionar</button>
+<div class="preco">R$109,99</div>
+<button onclick="addCart('Wake! Wake!',109.99)">Adicionar</button>
 </div>
 </div>
 
 </div>
-
 </section>
 
 <section class="sobre" id="sobre">
-
 <h2>Sobre a Aero Wear</h2>
-
 <p>
 A Aero Wear é uma marca inspirada na cultura streetwear e na autenticidade.
 Cada peça foi criada para representar atitude, personalidade e estilo único.
 Mais do que roupas, entregamos identidade.
 </p>
-
 </section>
 
 <section class="instagram" id="instagram">
-
 <h2>Nos acompanhe</h2>
 <br><br>
-
 <a href="https://www.instagram.com/aero.wear7/" target="_blank">
 📸 Instagram Oficial
 </a>
-
 </section>
 
 <footer>
-© 2026 Aero Wear —Todos os Direitos Reservados
+© 2026 Aero Wear — Todos os Direitos Reservados
 </footer>
+
+<div class="cart" id="cart">
+
+<button class="close-cart" onclick="toggleCart()">Fechar</button>
+
+<h2>Seu Carrinho</h2>
+
+<div id="cart-items"></div>
+
+<div class="total">
+Total: R$ <span id="total">0.00</span>
+</div>
+
+<button class="whatsapp" onclick="checkout()">
+Finalizar no WhatsApp
+</button>
+
+</div>
 
 <script>
 
-function comprar(){
-alert("Produto adicionado ao carrinho!");
+let cart=[]
+let total=0
+
+function toggleCart(){
+document.getElementById('cart').classList.toggle('active')
+}
+
+function addCart(nome,preco){
+cart.push({nome,preco})
+updateCart()
+}
+
+function updateCart(){
+
+let items=document.getElementById("cart-items")
+items.innerHTML=""
+total=0
+
+cart.forEach((item,index)=>{
+
+total+=item.preco
+
+items.innerHTML+=`
+<div class="cart-item">
+${item.nome}<br>
+R$ ${item.preco.toFixed(2)}
+</div>
+`
+
+})
+
+document.getElementById("total").innerText=total.toFixed(2)
+document.getElementById("cart-count").innerText=cart.length
+
+}
+
+function checkout(){
+
+let msg="Olá! Tenho interesse em:%0A"
+
+cart.forEach(item=>{
+msg+=`${item.nome} - R$${item.preco.toFixed(2)}%0A`
+})
+
+msg+=`%0ATotal: R$${total.toFixed(2)}`
+
+window.open(`https://wa.me/5566997163822?text=${msg}`)
+
 }
 
 </script>
